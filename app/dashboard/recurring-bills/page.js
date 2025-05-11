@@ -11,14 +11,47 @@ import warningIcon from '@/app/asset/public/warningIcon.svg'
 import sortIcon from '@/app/asset/public/sortIcon.svg'
 
 const Bills = () => {
-  const sortArray = ['Oldest','A to Z','Z to A','Highest','Lowest']
+  const sortArrays = ['Latest','Oldest','A to Z','Z to A','Highest','Lowest']
     const [showSortDropdown,setShowSortDropdown] = useState(false)
     const [billsArray,setBillsArray] = useState(allTransactions.filter((item)=> item.recurring === true).sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2)))
     const [searchInput,setSearchInput] = useState('')
+    const [dropDownValue,setDropDownValue] = useState('Latest')
+    const [sortArray,setSortArray] = useState(sortArrays)
 
     const onSearchClick = ()=>{
       const allBills = allTransactions.filter((item)=> item.recurring === true).sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2))
       setBillsArray(allBills.filter((item)=> item.name.toLowerCase().includes(searchInput.toLowerCase())))
+    }
+
+    const onClickDropdown = (value)=>{
+      const allBills = allTransactions.filter((item)=> item.recurring === true).sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2))
+        setSortArray(sortArray.map((item)=> item === value ? dropDownValue : item))
+        switch (value) {
+          case 'Latest':
+            setBillsArray(allBills)
+            break;
+          case 'Oldest':
+            setBillsArray(allBills.reverse())
+            break;
+          case 'A to Z':
+            setBillsArray(allBills.sort((a,b)=>a.name.localeCompare(b.name)))
+            break;
+          case 'Z to A':
+            setBillsArray(allBills.sort((a,b)=> b.name.localeCompare(a.name)))
+            break;
+          case 'Highest':
+            setBillsArray(allBills.sort((a,b)=> a.amount - b.amount))
+            break;
+          case 'Lowest':
+            setBillsArray(allBills.sort((a,b)=>b.amount - a.amount))
+            break;
+        
+          default:
+            setBillsArray(allBills);
+        }
+        setDropDownValue(value)
+      setShowSortDropdown(false)
+
     }
     
   return (
@@ -70,7 +103,7 @@ const Bills = () => {
             <nav>
               <p>Sort by</p>
               <section onClick={()=>{setShowSortDropdown(!showSortDropdown)}}>
-                <h6>Latest</h6>
+                <h6>{dropDownValue}</h6>
                 <Image height={6} width={11} src={arrowDown} alt='more'/>
               </section>
               <article>
@@ -79,11 +112,14 @@ const Bills = () => {
               {
                 showSortDropdown && <aside>
                 <ul>
-                  <h3>Latest</h3>
+                  
                   <>
                     {
                       sortArray.map((item,index)=>(
-                        <li key={index}>{item}</li>
+                        index === 0 ? 
+                        <h3 key={index}>{dropDownValue}</h3>
+                        :
+                        <li key={index} onClick={()=>onClickDropdown(item)}>{item}</li>
                       ))
                     }
                   </>

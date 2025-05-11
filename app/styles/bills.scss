@@ -324,7 +324,7 @@
             }
 
             .bills-bodyRight-content{
-                min-height: 150px;
+                min-height: 70px;
                 width: 100%;
                 display: flex;
                 flex-direction: column;
@@ -396,6 +396,7 @@
                         flex-direction: column;
                         justify-content: center;
                         gap: $spacing100;
+                        padding-inline: 0px;
                         article{
 
                             nav{
@@ -445,6 +446,10 @@
 
             @include respond (mini-laptop){
             width: 100%;
+        }
+
+        @include respond (phone){
+            padding: $spacing300 $spacing250;
         }
         }
 
