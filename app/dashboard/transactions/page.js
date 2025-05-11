@@ -181,11 +181,13 @@ const Transactions = () => {
               {
                 showSortDropdown && <aside>
                 <ul>
-                  <h3>{category}</h3>
                   <>
                     {
-                      transactionArray.map((item,index)=>(
-                        <li onClick={()=>onClickCategoryDropDown(item)} key={index}>{item}</li>
+                      sortArray.map((item,index)=>(
+                        index === 0 ? 
+                        <h3 key={index}>{dropDownValue}</h3>
+                        :
+                        <li key={index} onClick={()=>onClickDropdown(item)}>{item}</li>
                       ))
                     }
                   </>
