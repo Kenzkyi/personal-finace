@@ -15,7 +15,6 @@ const Bills = () => {
     const [showSortDropdown,setShowSortDropdown] = useState(false)
     const [billsArray,setBillsArray] = useState(allTransactions.filter((item)=> item.recurring === true).sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2)))
     const [searchInput,setSearchInput] = useState('')
-    console.log(billsArray)
 
     const onSearchClick = ()=>{
       const allBills = allTransactions.filter((item)=> item.recurring === true).sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2))
@@ -70,12 +69,12 @@ const Bills = () => {
             </main>
             <nav>
               <p>Sort by</p>
-              <section>
+              <section onClick={()=>{setShowSortDropdown(!showSortDropdown)}}>
                 <h6>Latest</h6>
                 <Image height={6} width={11} src={arrowDown} alt='more'/>
               </section>
               <article>
-                <Image src={sortIcon} height={15} width={15} alt='sort' onClick={()=>{setShowSortDropdown(!showSortDropdown);setShowTransactionDropdown(false)}}/>
+                <Image src={sortIcon} height={15} width={15} alt='sort' onClick={()=>{setShowSortDropdown(!showSortDropdown)}}/>
               </article>
               {
                 showSortDropdown && <aside>
