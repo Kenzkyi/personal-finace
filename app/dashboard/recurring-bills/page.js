@@ -20,18 +20,41 @@ const Bills = () => {
 
     const onSearchClick = ()=>{
       const allBills = allTransactions.filter((item)=> item.recurring === true).sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2))
-      setBillsArray(allBills.filter((item)=> item.name.toLowerCase().includes(searchInput.toLowerCase())))
+      const myFilteredArray = allBills.filter((item)=> item.name.toLowerCase().includes(searchInput.toLowerCase()))
+      switch (dropDownValue) {
+          case 'Latest':
+            setBillsArray(myFilteredArray.sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2)))
+            break;
+          case 'Oldest':
+            setBillsArray(myFilteredArray.sort((a,b)=>b.dueDate.slice(8,-2) - a.dueDate.slice(8,-2)))
+            break;
+          case 'A to Z':
+            setBillsArray(myFilteredArray.sort((a,b)=>a.name.localeCompare(b.name)))
+            break;
+          case 'Z to A':
+            setBillsArray(myFilteredArray.sort((a,b)=> b.name.localeCompare(a.name)))
+            break;
+          case 'Highest':
+            setBillsArray(myFilteredArray.sort((a,b)=> a.amount - b.amount))
+            break;
+          case 'Lowest':
+            setBillsArray(myFilteredArray.sort((a,b)=>b.amount - a.amount))
+            break;
+        
+          default:
+            setBillsArray(myFilteredArray);
+        }
     }
 
     const onClickDropdown = (value)=>{
-      const allBills = allTransactions.filter((item)=> item.recurring === true).sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2))
+      const allBills = billsArray
         setSortArray(sortArray.map((item)=> item === value ? dropDownValue : item))
         switch (value) {
           case 'Latest':
-            setBillsArray(allBills)
+            setBillsArray(allBills.sort((a,b)=>a.dueDate.slice(8,-2) - b.dueDate.slice(8,-2)))
             break;
           case 'Oldest':
-            setBillsArray(allBills.reverse())
+            setBillsArray(allBills.sort((a,b)=>b.dueDate.slice(8,-2) - a.dueDate.slice(8,-2)))
             break;
           case 'A to Z':
             setBillsArray(allBills.sort((a,b)=>a.name.localeCompare(b.name)))
@@ -55,7 +78,7 @@ const Bills = () => {
     }
     
   return (
-    <div className='bills'>
+    <div className='bills' onClick={()=>setShowSortDropdown(false)}>
       <div className='bills-title'>
         <h2>Recurring Bills</h2>
       </div>
@@ -102,12 +125,12 @@ const Bills = () => {
             </main>
             <nav>
               <p>Sort by</p>
-              <section onClick={()=>{setShowSortDropdown(!showSortDropdown)}}>
+              <section onClick={(e)=>{setShowSortDropdown(!showSortDropdown),e.stopPropagation()}}>
                 <h6>{dropDownValue}</h6>
                 <Image height={6} width={11} src={arrowDown} alt='more'/>
               </section>
               <article>
-                <Image src={sortIcon} height={15} width={15} alt='sort' onClick={()=>{setShowSortDropdown(!showSortDropdown)}}/>
+                <Image src={sortIcon} height={15} width={15} alt='sort' onClick={(e)=>{setShowSortDropdown(!showSortDropdown),e.stopPropagation()}}/>
               </article>
               {
                 showSortDropdown && <aside>
@@ -119,7 +142,7 @@ const Bills = () => {
                         index === 0 ? 
                         <h3 key={index}>{dropDownValue}</h3>
                         :
-                        <li key={index} onClick={()=>onClickDropdown(item)}>{item}</li>
+                        <li key={index} onClick={(e)=>{onClickDropdown(item),e.stopPropagation()}}>{item}</li>
                       ))
                     }
                   </>

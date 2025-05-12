@@ -25,7 +25,8 @@ const Transactions = () => {
   const [dropDownValue,setDropDownValue] = useState('Latest')
   const [sortArray,setSortArray] = useState(sortArrays)
   const [category,setCategory] = useState('All Transactions')
-  const transactionArray = ['Entertainment','Bills','Groceries','Dining Out','Transportation','Personal Care','Education','Lifestyle','Shopping','General']
+  const transactionArrays = ['All Transactions','Entertainment','Bills','Groceries','Dining Out','Transportation','Personal Care','Education','Lifestyle','Shopping','General']
+  const [transactionArray,setTransactionArray] = useState(transactionArrays)
 
   const onPageClick = (pageNum)=>{
     const perPage = 10
@@ -48,7 +49,7 @@ const Transactions = () => {
 
   const onNextClick = ()=>{
     const perPage = 10
-    if(pageIndex !== 4){
+    if(pageIndex < paginationIndex){
       let nextIndex = pageIndex + 1
       setInitialSlice(perPage * nextIndex)
       setFinalSlice((perPage * nextIndex) + 10)
@@ -58,7 +59,30 @@ const Transactions = () => {
   }
 
   const onSearchClick = ()=>{
-    setFilteresAllTransaction(allTransactions.filter((item)=>item.name.toLocaleLowerCase().includes(searchInput.toLowerCase())))
+    const myFilteredArray = allTransactions.filter((item)=>item.name.toLocaleLowerCase().includes(searchInput.toLowerCase()))
+    switch (dropDownValue) {
+          case 'Latest':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=> new Date(b.date) - new Date(a.date)))
+            break;
+          case 'Oldest':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=> new Date(a.date) - new Date(b.date)))
+            break;
+          case 'A to Z':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=>a.name.localeCompare(b.name)))
+            break;
+          case 'Z to A':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=> b.name.localeCompare(a.name)))
+            break;
+          case 'Highest':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=> b.amount - a.amount))
+            break;
+          case 'Lowest':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=>a.amount - b.amount))
+            break;
+        
+          default:
+            setFilteresAllTransaction(myFilteredArray);
+        }
     setPageIndex(0)
     setInitialSlice(0)
     setFinalSlice(10)
@@ -110,14 +134,48 @@ const Transactions = () => {
     }
 
     const onClickCategoryDropDown = (value)=>{
-      setFilteresAllTransaction(allTransactions.filter((item)=>item.category === value))
+    setTransactionArray(transactionArray.map((item)=> item === value ? category : item))
+    let myFilteredArray = []
+      if(value === 'All Transactions'){
+        myFilteredArray = allTransactions
+      }else{
+        myFilteredArray = allTransactions.filter((item)=>item.category === value)
+      }
+
+      switch (dropDownValue) {
+          case 'Latest':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=> new Date(b.date) - new Date(a.date)))
+            break;
+          case 'Oldest':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=> new Date(a.date) - new Date(b.date)))
+            break;
+          case 'A to Z':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=>a.name.localeCompare(b.name)))
+            break;
+          case 'Z to A':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=> b.name.localeCompare(a.name)))
+            break;
+          case 'Highest':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=> b.amount - a.amount))
+            break;
+          case 'Lowest':
+            setFilteresAllTransaction(myFilteredArray.sort((a,b)=>a.amount - b.amount))
+            break;
+        
+          default:
+            setFilteresAllTransaction(myFilteredArray);
+        }
       setShowTransactionDropdown(false)
+      setSearchInput('')
+      setPageIndex(0)
+      setInitialSlice(0)
+      setFinalSlice(10)
       setCategory(value)
     }
 
 
   return (
-    <div className='transactions'>
+    <div className='transactions' onClick={()=>{setShowSortDropdown(false);setShowTransactionDropdown(false)}}>
       <div className='transactions-title'>
         <h3>Transactions</h3>
       </div>
@@ -132,7 +190,7 @@ const Transactions = () => {
           <nav>
             <article>
               <p>Sort by</p>
-              <div onClick={()=>{setShowSortDropdown(!showSortDropdown);setShowTransactionDropdown(false)}}>
+              <div onClick={(e)=>{setShowSortDropdown(!showSortDropdown);setShowTransactionDropdown(false);e.stopPropagation()}}>
                 <h6>{dropDownValue}</h6>
                 <Image height={6} width={11} src={arrowDown} alt='more'/>
               </div>
@@ -145,7 +203,7 @@ const Transactions = () => {
                         index === 0 ? 
                         <h3 key={index}>{dropDownValue}</h3>
                         :
-                        <li key={index} onClick={()=>onClickDropdown(item)}>{item}</li>
+                        <li key={index} onClick={(e)=>{onClickDropdown(item);e.stopPropagation()}}>{item}</li>
                       ))
                     }
                   </>
@@ -155,18 +213,19 @@ const Transactions = () => {
             </article>
             <section>
               <p>Category</p>
-              <div onClick={()=>{setShowTransactionDropdown(!showtransactionDropdown);setShowSortDropdown(false)}}>
+              <div onClick={(e)=>{setShowTransactionDropdown(!showtransactionDropdown);setShowSortDropdown(false);e.stopPropagation()}}>
                 <h6>{category}</h6>
                 <Image height={6} width={11} src={arrowDown} alt='more'/>
               </div>
               {
                 showtransactionDropdown && <aside>
                 <ul>
-                  <h3>{category}</h3>
                   <>
                     {
                       transactionArray.map((item,index)=>(
-                        <li onClick={()=>onClickCategoryDropDown(item)} key={index}>{item}</li>
+                            index === 0 ? <h3 key={index}>{category}</h3>
+                            :
+                            <li onClick={(e)=>{onClickCategoryDropDown(item);e.stopPropagation()}} key={index}>{item}</li>
                       ))
                     }
                   </>
@@ -177,7 +236,7 @@ const Transactions = () => {
           </nav>
           <footer>
             <header>
-              <Image src={sortIcon} height={15} width={15} alt='sort' onClick={()=>{setShowSortDropdown(!showSortDropdown);setShowTransactionDropdown(false)}}/>
+              <Image src={sortIcon} height={15} width={15} alt='sort' onClick={(e)=>{setShowSortDropdown(!showSortDropdown);setShowTransactionDropdown(false);e.stopPropagation()}}/>
               {
                 showSortDropdown && <aside>
                 <ul>
@@ -187,7 +246,7 @@ const Transactions = () => {
                         index === 0 ? 
                         <h3 key={index}>{dropDownValue}</h3>
                         :
-                        <li key={index} onClick={()=>onClickDropdown(item)}>{item}</li>
+                        <li key={index} onClick={(e)=>{onClickDropdown(item);e.stopPropagation()}}>{item}</li>
                       ))
                     }
                   </>
@@ -196,7 +255,7 @@ const Transactions = () => {
               }
             </header>
             <div>
-              <Image src={transactionsIcon} height={15} width={16.25} alt='transactions' onClick={()=>{setShowTransactionDropdown(!showtransactionDropdown);setShowSortDropdown(false)}}/>
+              <Image src={transactionsIcon} height={15} width={16.25} alt='transactions' onClick={(e)=>{setShowTransactionDropdown(!showtransactionDropdown);setShowSortDropdown(false);e.stopPropagation()}}/>
               {
                 showtransactionDropdown && <aside>
                 <ul>
@@ -204,7 +263,7 @@ const Transactions = () => {
                   <>
                     {
                       transactionArray.map((item,index)=>(
-                        <li onClick={()=>onClickCategoryDropDown(item)} key={index}>{item}</li>
+                        <li onClick={(e)=>{onClickCategoryDropDown(item);e.stopPropagation()}} key={index}>{item}</li>
                       ))
                     }
                   </>
