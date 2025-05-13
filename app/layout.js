@@ -1,5 +1,6 @@
 import { Public_Sans } from "next/font/google";
 import "./globals.scss";
+import FinanceContext from "./context/FinanceContext";
 
 const publicSans = Public_Sans({
   variable: "--font-public-sans",
@@ -15,7 +16,9 @@ export default function RootLayout({ children }) {
         <title>Personal Finance app</title>
       </head>
       <body className={`${publicSans.className} antialiased`}>
+        <FinanceContext>
         {children}
+        </FinanceContext>
       </body>
     </html>
   );

@@ -1,22 +1,42 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import '@/app/styles/budgets.scss'
 import Image from 'next/image'
 import budgetsChart from '@/app/asset/public/budgetChart.png'
 import threeDots from '@/app/asset/public/threeDots.svg'
 import seeMore from '@/app/asset/public/seeMoreArrow.svg'
 import { allBudgets, allTransactions } from '@/app/asset/datas'
+import { useFinanceContext } from '@/app/context/FinanceContext'
 
 
 const Budgets = () => {
-  const randomNumber = ()=>{
-    const randomNum = Math.floor(Math.random() * 49)
-    return randomNum
+  const [showThreedots,setShowThreedots] = useState(null)
+  const { 
+    setOpenAddBudget,
+    allAvailableBudget,
+    setOpenEditBudget,
+    setSingleEditingBudget,
+    setOpenDeleteBudget,
+    setSingleDeleteBudget,
+  } = useFinanceContext()
+
+  const onclickOnEditBudget = (budgetItem)=>{
+    setSingleEditingBudget(budgetItem)
+    setOpenEditBudget(true)
+    setShowThreedots(null)
   }
+
+  const onclickOnDeleteBudget = (budgetItem)=>{
+    setSingleDeleteBudget(budgetItem)
+    setOpenDeleteBudget(true)
+    setShowThreedots(null)
+  }
+
   return (
-    <div className='budgets'>
+    <div className='budgets' onClick={()=>setShowThreedots(null)}>
       <div className='budgets-title'>
         <h3>Budgets</h3>
-        <button>+ Add New Budget</button>
+        <button onClick={()=>setOpenAddBudget(true)}>+ Add New Budget</button>
       </div>
       <div className='budgets-mainHolder'>
         <div className='budgets-mainHolderLeft'>
@@ -26,60 +46,28 @@ const Budgets = () => {
           <main>
             <h2>Spending Summary</h2>
             <section>
-              <article style={{border:'none'}}>
+              {
+                allAvailableBudget.map((item,index)=>(
+                  <article style={{border:'none'}} key={index}>
                 <div>
                   <header>
-                    <aside></aside>
-                    <p>Entertainment</p>
+                    <aside style={{backgroundColor:item.theme}}></aside>
+                    <p>{item.category}</p>
                   </header>
-                  <footer>
-                    <h5>$15.00</h5>
-                    <h6>of $50.00</h6>
+                  <footer style={{justifyContent:'flex-end'}}>
+                    <h5>${item.spent}</h5>
+                    <h6>of ${item.maximum}</h6>
                   </footer>
                 </div>
               </article>
-              <article>
-                <div>
-                  <header>
-                    <aside style={{backgroundColor:'#82C9D7'}}></aside>
-                    <p>Bills</p>
-                  </header>
-                  <footer>
-                    <h5>$150.00</h5>
-                    <h6>of $750.00</h6>
-                  </footer>
-                </div>
-              </article>
-              <article>
-                <div>
-                  <header>
-                    <aside style={{backgroundColor:'#F2CDAC'}}></aside>
-                    <p>Dining Out</p>
-                  </header>
-                  <footer>
-                    <h5>$133.00</h5>
-                    <h6>of $75.00</h6>
-                  </footer>
-                </div>
-              </article>
-              <article>
-                <div>
-                  <header>
-                    <aside style={{backgroundColor:'#626070'}}></aside>
-                    <p>Personal Care</p>
-                  </header>
-                  <footer>
-                    <h5>$40.00</h5>
-                    <h6>of $100.00</h6>
-                  </footer>
-                </div>
-              </article>
+                ))
+              }
             </section>
           </main>
         </div>
         <div className='budgets-mainHolderRight'>
           {
-            allBudgets.map((item,index)=>(
+            allAvailableBudget.map((item,index)=>(
               <div className='budgets-mainContent' key={index}>
             <div className='budgets-mainContent-title'>
               <main>
@@ -87,12 +75,22 @@ const Budgets = () => {
                 <h6>{item.category}</h6>
               </main>
               <nav>
-                <Image src={threeDots} height={3.5} width={13.5} alt='dots'/>
+                <Image src={threeDots} height={3.5} width={13.5} alt='dots' onClick={(e)=>{setShowThreedots(index),e.stopPropagation()}}/>
+                {
+                  showThreedots === index ? <div>
+                  <section style={{borderTop:'none'}}>
+                    <article onClick={(e)=>{onclickOnEditBudget(item);e.stopPropagation()}}>Edit Budget</article>
+                  </section>
+                  <section>
+                    <article style={{color:'red'}} onClick={(e)=>{onclickOnDeleteBudget(item);e.stopPropagation()}}>Delete Budget</article>
+                  </section>
+                </div> : null
+                }
               </nav>
             </div>
             <div className='budgets-mainContent-amountBar'>
               <section>Maximum of ${item.maximum.toFixed(2)}</section>
-              <nav>
+              <nav style={{maxWidth:'100%'}}>
                 <aside style={{backgroundColor:item.theme,width:`${(item.spent/item.maximum) * 100}%`}}></aside>
               </nav>
               <main>
@@ -121,42 +119,22 @@ const Budgets = () => {
               </button>
               </header>
               <footer>
-                <main style={{borderTop:'none'}}>
+                {
+                  allTransactions.filter((items)=>items.category === item.category).slice(0,3).map((element,indexes)=>(
+                    <main key={indexes} style={{borderTop: indexes === 0 ? 'none' : '1px solid #69686830'}} >
                   <article>
                     <section>
-                      <Image height={32} width={32} src={allTransactions[randomNumber()]?.avatar} alt='' style={{borderRadius:'100%'}}/>
-                      <h5>{allTransactions[randomNumber()]?.name}</h5>
+                      <Image height={32} width={32} src={element?.avatar} alt='' style={{borderRadius:'100%'}}/>
+                      <h5>{element?.name}</h5>
                     </section>
                     <aside>
-                      <h6>-${allTransactions[randomNumber()]?.amount.toFixed(2).slice(1)}</h6>
-                      <p>{allTransactions[randomNumber()]?.date.slice(0,10)}</p>
+                      <h6>-${element?.amount.toFixed(2).slice(1)}</h6>
+                      <p>{element?.date.slice(0,10)}</p>
                     </aside>
                   </article>
                 </main>
-                <main>
-                  <article>
-                    <section>
-                      <Image height={32} width={32} src={allTransactions[randomNumber()]?.avatar} alt='' style={{borderRadius:'100%'}}/>
-                      <h5>{allTransactions[randomNumber()]?.name}</h5>
-                    </section>
-                    <aside>
-                      <h6>-${allTransactions[randomNumber()]?.amount.toFixed(2).slice(1)}</h6>
-                      <p>{allTransactions[randomNumber()]?.date.slice(0,10)}</p>
-                    </aside>
-                  </article>
-                </main>
-                <main>
-                  <article>
-                    <section>
-                      <Image height={32} width={32} src={allTransactions[randomNumber()]?.avatar} alt='' style={{borderRadius:'100%'}}/>
-                      <h5>{allTransactions[randomNumber()]?.name}</h5>
-                    </section>
-                    <aside>
-                      <h6>-${allTransactions[randomNumber()]?.amount.toFixed(2).slice(1)}</h6>
-                      <p>{allTransactions[randomNumber()]?.date.slice(0,10)}</p>
-                    </aside>
-                  </article>
-                </main>
+                  ))
+                }
               </footer>
             </div>
           </div>

@@ -440,28 +440,32 @@ export const allBudgets = [
         "maximum": 50.00,
         "theme": "#277C78",
         "spent": 15.00,
-        "remaining": 35.00
+        "remaining": 35.00,
+        "id": 1
     },
     {
         "category": "Bills",
         "maximum": 750.00,
         "theme": "#82C9D7",
         "spent": 150.00,
-        "remaining": 600.00
+        "remaining": 600.00,
+        "id": 2
     },
     {
         "category": "Dining Out",
         "maximum": 75.00,
         "theme": "#F2CDAC",
-        "spent": 75.00,
-        "remaining": 0.00
+        "spent": 133.00,
+        "remaining": 0.00,
+        "id": 3
     },
     {
         "category": "Personal Care",
         "maximum": 100.00,
         "theme": "#626070",
         "spent": 40.00,
-        "remaining": 60.00
+        "remaining": 60.00,
+        "id": 4
     }
 ]
 
@@ -497,3 +501,81 @@ export const allPots = [
         "theme": "#826CB0"
     }
 ]
+
+export const colorDropArray = [
+        {
+            name: 'Green',
+            hex: '#277C78',
+            alreadyUsed: true
+        },
+        {
+            name: 'Yellow',
+            hex: '#F2CDAC',
+            alreadyUsed: true
+        },
+        {
+            name: 'cyan',
+            hex: '#82C9D7',
+            alreadyUsed: true
+        },
+        {
+            name: 'Navy',
+            hex: '#626070',
+            alreadyUsed: true
+        },
+        {
+            name: 'Red',
+            hex: '#C94736',
+            alreadyUsed: false
+        },
+        {
+            name: 'Purple',
+            hex: '#826CB0',
+            alreadyUsed: false
+        },
+        {
+            name: 'Turquoise',
+            hex: '#597C7C',
+            alreadyUsed: false
+        },
+        {
+            name: 'Brown',
+            hex: '#93674F',
+            alreadyUsed: false
+        },
+        {
+            name: 'Magenta',
+            hex: '#934F6F',
+            alreadyUsed: false
+        },
+        {
+            name: 'Blue',
+            hex: '#3F82B2',
+            alreadyUsed: false
+        },
+        {
+            name: 'Grey',
+            hex: '#97A0AC',
+            alreadyUsed: false
+        },
+        {
+            name: 'Army',
+            hex: '#7F9161',
+            alreadyUsed: false
+        },
+        {
+            name: 'Pink',
+            hex: '#AF81BA',
+            alreadyUsed: false
+        },
+        {
+            name: 'Gold',
+            hex: '#CAB361',
+            alreadyUsed: false
+        },
+        {
+            name: 'orange',
+            hex: '#BE6C49',
+            alreadyUsed: false
+        },
+    ]
