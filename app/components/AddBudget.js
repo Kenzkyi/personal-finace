@@ -67,7 +67,10 @@ const AddBudget = () => {
                 acc += item.amount
                 return acc
             },0).toString().slice(1)),
-            remaining: Number(maximumSpend) - Number(allTransactions.filter((item)=>item.category === categorySelected).reduce((acc,item)=>{
+            remaining: (Number(maximumSpend) - Number(allTransactions.filter((item)=>item.category === categorySelected).reduce((acc,item)=>{
+                acc += item.amount
+                return acc
+            },0).toString().slice(1))).toString().startsWith('-') ? 0 : Number(maximumSpend) - Number(allTransactions.filter((item)=>item.category === categorySelected).reduce((acc,item)=>{
                 acc += item.amount
                 return acc
             },0).toString().slice(1))

@@ -98,6 +98,44 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                position: relative;
+
+                div{
+                        height: 91px;
+                        width: 134px;
+                        border-radius: $spacing100;
+                        padding: $spacing150 $spacing250;
+                        background-color: white;
+                        display: flex;
+                        flex-direction: column;
+                        transform: translateY(100%);
+                        bottom: -10px;
+                        right: 0px;
+                        box-shadow: 0px 4px 24px #00000040;
+                        cursor: default;
+                        position: absolute;
+
+                        section{
+                            height: 45px;
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: default;
+                            border-top: 1px solid $dark_white;
+
+                            article{
+                                width: fit-content;
+                                height: 21px;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                font-weight: 400;
+                                font-size: $spacing175;
+                                color: $black;
+                            }
+                        }
+                    }
             }
         }
 

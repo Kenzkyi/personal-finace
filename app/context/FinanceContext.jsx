@@ -1,6 +1,6 @@
 'use client'
 import React, { createContext, useContext, useState } from 'react'
-import { allBudgets, colorDropArray } from '../asset/datas'
+import { allBudgets, allPots, colorDropArray, colorDropPotArray } from '../asset/datas'
 
 const myContext = createContext()
 
@@ -10,10 +10,17 @@ const FinanceContext = ({children}) => {
     const [openAddBudget,setOpenAddBudget] = useState(false)
     const [openEditBudget,setOpenEditBudget] = useState(false) 
     const [openDeleteBudget,setOpenDeleteBudget] = useState(false)
+    const [openAddPot,setOpenAddPot] = useState(false)
+    const [openEditPot,setOpenEditPot] = useState(false) 
+    const [openDeletePot,setOpenDeletePot] = useState(false)
     const [singleEditingBudget,setSingleEditingBudget] = useState({})
     const [singleDeletingBudget,setSingleDeleteBudget] = useState({})
+    const [singleEditingPot,setSingleEditingPot] = useState({})
+    const [singleDeletingPot,setSingleDeletePot] = useState({})
     const [allAvailableBudget,setAllAvailableBudget] = useState(allBudgets)
+    const [allAvailablePots,setAllAvailablePots] = useState(allPots)
     const [allAvailableColors,setAllAvailableColors] = useState(colorDropArray)
+    const [allAvailablePotColors,setAllAvailablePotColors] = useState(colorDropPotArray)
 
     const defaultValue = {
         openAddBudget,
@@ -29,7 +36,21 @@ const FinanceContext = ({children}) => {
         openDeleteBudget,
         setOpenDeleteBudget,
         singleDeletingBudget,
-        setSingleDeleteBudget
+        setSingleDeleteBudget,
+        openAddPot,
+        setOpenAddPot,
+        allAvailablePotColors,
+        setAllAvailablePotColors,
+        allAvailablePots,
+        setAllAvailablePots,
+        openEditPot,
+        setOpenEditPot,
+        singleEditingPot,
+        setSingleEditingPot,
+        openDeletePot,
+        setOpenDeletePot,
+        singleDeletingPot,
+        setSingleDeletePot,
     }
     
     

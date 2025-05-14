@@ -1,19 +1,41 @@
-import React from 'react'
+'use client'
+import { useState } from 'react'
 import '@/app/styles/pots.scss'
 import Image from 'next/image'
 import threeDots from '@/app/asset/public/threeDots.svg'
-import { allPots } from '@/app/asset/datas'
+import { useFinanceContext } from '@/app/context/FinanceContext'
 
 const Pots = () => {
+  const [showThreedots,setShowThreedots] = useState(null)
+    const { 
+      setOpenAddPot,
+      setOpenEditPot,
+      setSingleEditingPot,
+      setOpenDeletePot,
+      setSingleDeletePot,
+      allAvailablePots,
+    } = useFinanceContext()
+  
+    const onclickOnEditBudget = (budgetItem)=>{
+      setSingleEditingPot(budgetItem)
+      setOpenEditPot(true)
+      setShowThreedots(null)
+    }
+  
+    const onclickOnDeleteBudget = (budgetItem)=>{
+      setSingleDeletePot(budgetItem)
+      setOpenDeletePot(true)
+      setShowThreedots(null)
+    }
   return (
-    <div className='pots'>
+    <div className='pots' onClick={()=>setShowThreedots(null)}>
       <div className='pots-title'>
         <h2>Pots</h2>
-        <button>+ Add New Pot</button>
+        <button onClick={()=>setOpenAddPot(true)}>+ Add New Pot</button>
       </div>
       <div className='pots-body'>
         {
-          allPots.map((item,index)=>(
+          allAvailablePots.map((item,index)=>(
             <div className='pots-bodyContent' key={index}>
           <div className='pots-bodyContent-title'>
             <main>
@@ -21,7 +43,17 @@ const Pots = () => {
               <h4>{item?.name}</h4>
             </main>
             <nav>
-              <Image src={threeDots} height={3.5} width={13.5} alt='dots'/>
+              <Image src={threeDots} height={3.5} width={13.5} alt='dots' onClick={(e)=>{setShowThreedots(index);e.stopPropagation()}}/>
+              {
+                  showThreedots === index ? <div>
+                  <section style={{borderTop:'none'}}>
+                    <article onClick={(e)=>{onclickOnEditBudget(item);e.stopPropagation()}}>Edit Budget</article>
+                  </section>
+                  <section>
+                    <article style={{color:'red'}} onClick={(e)=>{onclickOnDeleteBudget(item);e.stopPropagation()}}>Delete Budget</article>
+                  </section>
+                </div> : null
+                }
             </nav>
           </div>
           <div className='pots-bodyContent-chart'>
@@ -30,8 +62,8 @@ const Pots = () => {
               <h3>${item?.total.toFixed(2)}</h3>
             </main>
             <nav>
-              <section>
-                <div style={{backgroundColor:item.theme,width:`${((item.total/item.target) * 100).toFixed(2)}%`}}></div>
+              <section style={{maxWidth:'100%'}}>
+                <div style={{backgroundColor:item.theme,width:`${((item.total/item.target) * 100).toFixed(2)}%`,maxWidth:'100%'}}></div>
               </section>
               <article>
                 <h6>{`${((item.total/item.target) * 100).toFixed(2)}`}%</h6>

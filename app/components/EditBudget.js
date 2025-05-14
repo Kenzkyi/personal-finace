@@ -51,7 +51,7 @@ const EditBudget = () => {
     const onSaveChanges = ()=>{
         let newColorArray = []
         if (validateForm()) {
-            const updatedArray = allAvailableBudget.map((item)=>item.id === singleEditingBudget.id ? {...item,theme:colorSelected.hex,maximum:Number(maximumSpend),remaining:Number(maximumSpend)-item.spent} : item)
+            const updatedArray = allAvailableBudget.map((item)=>item.id === singleEditingBudget.id ? {...item,theme:colorSelected.hex,maximum:Number(maximumSpend),remaining:(Number(maximumSpend)-item.spent).toString().startsWith('-') ? 0 : Number(maximumSpend)-item.spent} : item)
             if (colorSelected.hex === singleEditingBudget.theme){
                 newColorArray = allAvailableColors.map((item)=>item.hex === colorSelected.hex ? {...item,alreadyUsed: true} : item)
             }else{
