@@ -14,6 +14,10 @@ const Pots = () => {
       setOpenDeletePot,
       setSingleDeletePot,
       allAvailablePots,
+      setOpenAddMoney,
+      setSingleAddMoneyDetails,
+      setOpenWithdrawMoney,
+      setSingleWithdrawMoneyDetails
     } = useFinanceContext()
   
     const onclickOnEditBudget = (budgetItem)=>{
@@ -72,8 +76,8 @@ const Pots = () => {
             </nav>
           </div>
           <div className='pots-bodyContent-buttons'>
-            <button>+ Add Money</button>
-            <button>Withdraw</button>
+            <button onClick={()=>{setOpenAddMoney(true);setSingleAddMoneyDetails(item)}}>+ Add Money</button>
+            <button onClick={()=>{setOpenWithdrawMoney(true);setSingleWithdrawMoneyDetails(item)}}>Withdraw</button>
           </div>
         </div>
           ))

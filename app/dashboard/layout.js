@@ -8,6 +8,8 @@ import DeleteBudget from '../components/DeleteBudget'
 import AddPot from '../components/AddPot'
 import EditPot from '../components/EditPot'
 import DeletePot from '../components/DeletePot'
+import AddMoney from '../components/AddMoney'
+import WithdrawMoney from '../components/WithdrawMoney'
 
 const dashboardLayout = ({children}) => {
   const { 
@@ -17,6 +19,8 @@ const dashboardLayout = ({children}) => {
     openAddPot,
     openEditPot,
     openDeletePot,
+    openAddMoney,
+    openWithdrawMoney,
   } = useFinanceContext()
   return (
     <div className='dashboardLayout'>
@@ -47,6 +51,12 @@ const dashboardLayout = ({children}) => {
       }
       {
         openDeletePot && <DeletePot />
+      }
+      {
+        openAddMoney && <AddMoney />
+      }
+      {
+        openWithdrawMoney && <WithdrawMoney />
       }
     </div>
   )

@@ -13,10 +13,14 @@ const FinanceContext = ({children}) => {
     const [openAddPot,setOpenAddPot] = useState(false)
     const [openEditPot,setOpenEditPot] = useState(false) 
     const [openDeletePot,setOpenDeletePot] = useState(false)
+    const [openAddMoney,setOpenAddMoney] = useState(false)
+    const [openWithdrawMoney,setOpenWithdrawMoney] = useState(false)
     const [singleEditingBudget,setSingleEditingBudget] = useState({})
     const [singleDeletingBudget,setSingleDeleteBudget] = useState({})
     const [singleEditingPot,setSingleEditingPot] = useState({})
     const [singleDeletingPot,setSingleDeletePot] = useState({})
+    const [singleAddMoneyDetails,setSingleAddMoneyDetails] = useState({})
+    const [singleWithdrawMoneyDetails,setSingleWithdrawMoneyDetails] = useState({})
     const [allAvailableBudget,setAllAvailableBudget] = useState(allBudgets)
     const [allAvailablePots,setAllAvailablePots] = useState(allPots)
     const [allAvailableColors,setAllAvailableColors] = useState(colorDropArray)
@@ -51,6 +55,14 @@ const FinanceContext = ({children}) => {
         setOpenDeletePot,
         singleDeletingPot,
         setSingleDeletePot,
+        openAddMoney,
+        setOpenAddMoney,
+        singleAddMoneyDetails,
+        setSingleAddMoneyDetails,
+        openWithdrawMoney,
+        setOpenWithdrawMoney,
+        singleWithdrawMoneyDetails,
+        setSingleWithdrawMoneyDetails
     }
     
     

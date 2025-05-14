@@ -1,0 +1,66 @@
+'use client'
+import '@/app/styles/addMoney.scss'
+import cancelIcon from '@/app/asset/public/cancelIcon.svg'
+import Image from 'next/image'
+import { useState } from 'react'
+import { useFinanceContext } from '../context/FinanceContext'
+
+const WithdrawMoney = () => {
+    const { 
+    setOpenWithdrawMoney,
+    singleWithdrawMoneyDetails,
+    allAvailablePots,
+    setAllAvailablePots,
+  } = useFinanceContext()
+  const [amount,setAmount] = useState('')
+  const [error,setError] = useState('')
+  const [newAmount,setNewAmount] = useState(singleWithdrawMoneyDetails.total)
+
+    const onConfirmWithdrawal = ()=>{
+    if (amount >= 1 && !newAmount.toString().startsWith('-')) {
+      const updatedArray = allAvailablePots.map((item)=>item.id === singleWithdrawMoneyDetails.id ? {...item,total: newAmount} : item)
+      setAllAvailablePots(updatedArray)
+      setOpenWithdrawMoney(false)
+    }else{
+      setError('Input a valid amount')
+    }
+  }
+
+  return (
+    <div className='addMoney' onClick={()=>setOpenWithdrawMoney(false)}>
+      <div className='addMoney-modal' onClick={(e)=>e.stopPropagation()}>
+        <div className='addMoney-modal-title'>
+            <h2>Withdraw from ‘{singleWithdrawMoneyDetails.name}’</h2>
+            <Image src={cancelIcon} height={25.5} width={25.5} alt='cancel' style={{cursor:'pointer'}} onClick={()=>setOpenWithdrawMoney(false)}/>
+        </div>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus  hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet.</p>
+        <main>
+          <header>
+            <h6>New Amount</h6>
+            <h5>${newAmount}</h5>
+          </header>
+          <footer>
+            <section>
+              <div style={{display:'flex'}}>
+              {/* <aside style={{backgroundColor:'orange'}}></aside> */}
+              <aside></aside>
+              </div>
+            </section>
+            <article>
+              <h3>{`${((amount/singleWithdrawMoneyDetails.target) * 100).toFixed(2)}%`}</h3>
+              <h4>Target of ${singleWithdrawMoneyDetails.target}</h4>
+            </article>
+          </footer>
+        </main>
+        <nav>
+          <label>Amount to Withdraw</label>
+          <input autoFocus type="number" placeholder='$ e.g. 200' value={amount} onChange={(e)=>{setAmount(e.target.value);setError('');setNewAmount(Number(singleWithdrawMoneyDetails.total) - Number(e.target.value))}}/>
+          <small>{error}</small>
+        </nav>
+        <button onClick={onConfirmWithdrawal}>Confirm Withdrawal</button>
+      </div>
+    </div>
+  )
+}
+
+export default WithdrawMoney
