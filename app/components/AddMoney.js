@@ -52,7 +52,13 @@ const AddMoney = () => {
         </main>
         <nav>
           <label>Amount to Add</label>
-          <input autoFocus type="number" placeholder='$ e.g. 200' value={amount} onChange={(e)=>{setAmount(e.target.value);setError('');setNewAmount(Number(singleAddMoneyDetails.total) + Number(e.target.value))}}/>
+          <input autoFocus type="number" placeholder='$ e.g. 200' value={amount} onChange={(e)=>{
+            setError('');
+            const value = Number(e.target.value)
+            if ((value + Number(singleAddMoneyDetails.total))<= singleAddMoneyDetails.target) {
+              setAmount(e.target.value);
+            setNewAmount(Number(singleAddMoneyDetails.total) + Number(e.target.value))}
+            }}/>
           <small>{error}</small>
         </nav>
         <button onClick={onConfirmAddition}>Confirm Addition</button>

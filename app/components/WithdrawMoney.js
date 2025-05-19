@@ -41,9 +41,9 @@ const WithdrawMoney = () => {
           </header>
           <footer>
             <section>
-              <div style={{display:'flex'}}>
-              {/* <aside style={{backgroundColor:'orange'}}></aside> */}
-              <aside></aside>
+              <div style={{display:'flex',background:'transparent',borderRadius:4,gap:2,width:`${(singleWithdrawMoneyDetails.total/singleWithdrawMoneyDetails.target) * 100}%`,maxWidth:`${(singleWithdrawMoneyDetails.total/singleWithdrawMoneyDetails.target) * 100}%`}}>
+              <aside style={{backgroundColor:'black',borderRadius: '4px 0px 0px 4px',width: newAmount.toString().startsWith('-') ? '0%' : `${100 - ((amount/singleWithdrawMoneyDetails.total) * 100)}%`}}></aside>
+              <aside style={{backgroundColor:'red',width: newAmount.toString().startsWith('-') ? '100%' : `${((amount/singleWithdrawMoneyDetails.total) * 100)}%`,maxWidth:`100%`}}></aside>
               </div>
             </section>
             <article>
@@ -54,7 +54,14 @@ const WithdrawMoney = () => {
         </main>
         <nav>
           <label>Amount to Withdraw</label>
-          <input autoFocus type="number" placeholder='$ e.g. 200' value={amount} onChange={(e)=>{setAmount(e.target.value);setError('');setNewAmount(Number(singleWithdrawMoneyDetails.total) - Number(e.target.value))}}/>
+          <input autoFocus type="number" placeholder='$ e.g. 200' value={amount} onChange={(e)=>{
+            setError('');
+            const value = Number(e.target.value)
+            if (value <= singleWithdrawMoneyDetails.total) {
+              setAmount(e.target.value);
+              setNewAmount(Number(singleWithdrawMoneyDetails.total) - Number(e.target.value))
+            }
+          }}/>
           <small>{error}</small>
         </nav>
         <button onClick={onConfirmWithdrawal}>Confirm Withdrawal</button>
